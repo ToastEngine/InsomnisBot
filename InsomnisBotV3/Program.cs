@@ -1,6 +1,5 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -12,9 +11,14 @@ namespace InsomnisBotV3
         static CommandsNextModule commands;
         private static string token;
 
+        static void initDatabase()
+        {
+            Util.Logger.Log(0, "Init Database"); 
+        }
         static void Main(string[] args)
         {
-            token = System.IO.File.ReadAllText("C:\\Users\\Xeon\\source\\repos\\InsomnisBotV3\\InsomnisBotV3\\Token.txt");
+            initDatabase();
+            token = System.IO.File.ReadAllText("C:\\Users\\Xeon\\Desktop\\Token.txt");
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
