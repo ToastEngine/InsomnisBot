@@ -3,6 +3,7 @@ using DSharpPlus.CommandsNext;
 using System;
 using System.Threading.Tasks;
 using LiteDB;
+using System.IO;
 
 namespace InsomnisBotV3
 {
@@ -11,22 +12,52 @@ namespace InsomnisBotV3
         private static DiscordClient discord;
         static CommandsNextModule commands;
         private static string token;
+        private static string DirectoryPath;
 
-        static void initDatabase()
+        static void Setup()
         {
-            Util.Logger.Log(0, "Init Database");
-            using (var db = new LiteDatabase("C:\\Users\\Xeon\\Desktop\\Database.db"))
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            filePath += "\\Insomnis Bot";
+            if (!Directory.Exists(filePath))
             {
-                var col = db.GetCollection<User>("Users");
-                //  var testuser = new User("TestDiscordId", 0);
-                //  col.Insert(testuser);
-                Util.Logger.Log(0, "Database size :: "+col.Count());
+                Directory.CreateDirectory(filePath);
+                Util.Logger.Log(0, "Created directory @" + filePath);
+                Util.Logger.Log(0, "Init Database");
+                using (var db = new LiteDatabase(filePath +"\\Database.db"))
+                {
+                    var col = db.GetCollection<User>("Users");
+                    Util.Logger.Log(0, "Database size :: " + col.Count());
+                }
+                DirectoryPath = filePath;
             }
-            
+            else
+            {
+                Util.Logger.Log(0, "Directory exists @" + filePath);
+                using (var db = new LiteDatabase(filePath + "\\Database.db"))
+                {
+                    var col = db.GetCollection<User>("Users");
+                    Util.Logger.Log(0, "Database size :: " + col.Count());
+                }
+                DirectoryPath = filePath;
+            }
+            if (File.Exists(filePath += "\\Token.txt"))
+            {
+                Util.Logger.Log(0, "Found auth token!");
+                token = File.ReadAllText(filePath + "\\Token.txt");
+            }
+            else
+            {
+                Util.Logger.Log(3, filePath);
+                Util.Logger.Log(3, "Failed to find auth token!, press any key to close!");
+                Console.ReadKey();
+                Environment.Exit(1);
+            }
         }
+
         static void Main(string[] args)
         {
-            initDatabase();
+            Setup();
+
             token = System.IO.File.ReadAllText("C:\\Users\\Xeon\\Desktop\\Token.txt");
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
         }
