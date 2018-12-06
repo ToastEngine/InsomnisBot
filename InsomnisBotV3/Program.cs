@@ -40,7 +40,7 @@ namespace InsomnisBotV3
                 }
                 DirectoryPath = filePath;
             }
-            if (File.Exists(filePath += "\\Token.txt"))
+            if (File.Exists(filePath + "\\Token.txt"))
             {
                 Util.Logger.Log(0, "Found auth token!");
                 token = File.ReadAllText(filePath + "\\Token.txt");
@@ -57,8 +57,6 @@ namespace InsomnisBotV3
         static void Main(string[] args)
         {
             Setup();
-
-            token = System.IO.File.ReadAllText("C:\\Users\\Xeon\\Desktop\\Token.txt");
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
