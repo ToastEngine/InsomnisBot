@@ -11,7 +11,8 @@ namespace InsomnisBotV3
         public bool chatMute { get; set; }
         public DateTime muteExpire { get; set; }
         public int WarningCount { get; set; }
-        
+        public Guid Id { get; set; }
+
         public User(string id, int permission)
         {
             DiscordId = id;

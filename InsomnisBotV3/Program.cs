@@ -2,6 +2,7 @@
 using DSharpPlus.CommandsNext;
 using System;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace InsomnisBotV3
 {
@@ -13,7 +14,15 @@ namespace InsomnisBotV3
 
         static void initDatabase()
         {
-            Util.Logger.Log(0, "Init Database"); 
+            Util.Logger.Log(0, "Init Database");
+            using (var db = new LiteDatabase("C:\\Users\\Xeon\\Desktop\\Database.db"))
+            {
+                var col = db.GetCollection<User>("Users");
+                //  var testuser = new User("TestDiscordId", 0);
+                //  col.Insert(testuser);
+                Util.Logger.Log(0, "Database size :: "+col.Count());
+            }
+            
         }
         static void Main(string[] args)
         {
