@@ -31,7 +31,7 @@ namespace InsomnisBotV3
             }
             return null;
         }
-
+        //hi
         public static void setUser(User user)
         {
             var col = database.GetCollection<User>("Users");
