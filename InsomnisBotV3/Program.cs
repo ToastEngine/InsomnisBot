@@ -27,6 +27,7 @@ namespace InsomnisBotV3
                 {
                     var col = db.GetCollection<User>("Users");
                     Util.Logger.Log(0, "Database size :: " + col.Count());
+                    Database.init(db);
                 }
                 DirectoryPath = filePath;
             }
@@ -37,6 +38,7 @@ namespace InsomnisBotV3
                 {
                     var col = db.GetCollection<User>("Users");
                     Util.Logger.Log(0, "Database size :: " + col.Count());
+                    Database.init(db);
                 }
                 DirectoryPath = filePath;
             }
