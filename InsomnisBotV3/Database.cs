@@ -10,6 +10,7 @@ namespace InsomnisBotV3
         private static LiteDatabase database;
         private static bool Ready;
         public static bool isReady { get { return Ready; } }
+
         public static void init(LiteDatabase db)
         {
             Util.Logger.Log(0, "Initializing Database");
