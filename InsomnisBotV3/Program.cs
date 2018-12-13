@@ -15,51 +15,28 @@ namespace InsomnisBotV3
         private static string token;
         private static string DirectoryPath;
 
-        static void Setup()
+        static void Install()
         {
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             filePath += "\\Insomnis Bot";
             if (!Directory.Exists(filePath))
             {
+                Console.WriteLine("Installing...");
+                Console.WriteLine("Installing Database");
                 Directory.CreateDirectory(filePath);
-                Util.Logger.Log(0, "Created directory @" + filePath);
-                Util.Logger.Log(0, "Init Database");
-                using (var db = new LiteDatabase(filePath +"\\Database.db"))
-                {
-                    var col = db.GetCollection<User>("Users");
-                    Util.Logger.Log(0, "Database size :: " + col.Count());
-                    Database.init(db);
-                }
-                DirectoryPath = filePath;
+
+                Database.initDatabase(filePath);
+
             }
             else
             {
-                Util.Logger.Log(0, "Directory exists @" + filePath);
-                using (var db = new LiteDatabase(filePath + "\\Database.db"))
-                {
-                    var col = db.GetCollection<User>("Users");
-                    Util.Logger.Log(0, "Database size :: " + col.Count());
-                    Database.init(db);
-                }
-                DirectoryPath = filePath;
-            }
-            if (File.Exists(filePath + "\\Token.txt"))
-            {
-                Util.Logger.Log(0, "Found auth token!");
-                token = File.ReadAllText(filePath + "\\Token.txt");
-            }
-            else
-            {
-                Util.Logger.Log(3, filePath);
-                Util.Logger.Log(3, "Failed to find auth token!, press any key to close!");
-                Console.ReadKey();
-                Environment.Exit(1);
+                Console.WriteLine("Already Installed");
             }
         }
 
         static void Main(string[] args)
         {
-            Setup();
+            Install();
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 

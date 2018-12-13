@@ -1,32 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace InsomnisBotV3
 {
     class User
     {
         public ulong DiscordId { get; set; }
-        public int PermissionLevel { get; set; }
-        public bool chatMute { get; set; }
-        public DateTime muteExpire { get; set; }
-        public int WarningCount { get; set; }
-        public ulong GuildId{get; set;}
-        public Guid Id { get; set; }
+        public ulong GuildId { get; set; }
+        public bool ChatMute { get; set; }
+        public bool VoiceMute { get; set; }
+        public DateTime ChatMuteExpire { get; set; }
+        public DateTime VoiceMuteExpire { get; set; }
+        public int PermissionLvl { get; set; }
+        public Guid id { get; set; }
 
-        public User(ulong id, int permission, ulong discordServerId)
+        public User(ulong DiscordId, ulong GuildId)
         {
-            DiscordId = id;
-            PermissionLevel = permission;
-            GuildId = discordServerId;
-            Util.Logger.Log(0, "Created user @" + id);
-        }        
-        public void setPermissionlvl(int permissionlvl)
+            this.DiscordId = DiscordId;
+            this.GuildId = GuildId;
+            ChatMute = false;
+            VoiceMute = false;
+            ChatMuteExpire = DateTime.MinValue;
+            VoiceMuteExpire = DateTime.MaxValue;
+            PermissionLvl = 1;
+        }
+        public User()
         {
-            PermissionLevel = permissionlvl;
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("Permission level channged @"+DiscordId);
-            Console.ForegroundColor = ConsoleColor.White;
+
         }
     }
 }

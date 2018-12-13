@@ -1,77 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using LiteDB;
 
 namespace InsomnisBotV3
 {
     class Database
     {
-        private static LiteDatabase database;
-        private static bool Ready;
-        public static bool isReady { get { return Ready; } }
-
-        public static void init(LiteDatabase db)
+        private static string DatabasePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\WorkingWithDbDemo";
+        public static void initDatabase(string filePath)
         {
-            Util.Logger.Log(0, "Initializing Database");
-            database = db;
-            Ready = true;
+            using (var db = new LiteDatabase(filePath + "\\Databse.db"))
+            {
+                var col = db.GetCollection<User>("Users");
+                Console.WriteLine("Database size :: " + col.Count());
+
+                User newUser = new User(69, 69);
+                col.Insert(newUser);
+            }
         }
 
-        public static bool userExists(ulong userid, ulong guildid)
+        public static void addUser(User user)
         {
-            var col = database.GetCollection<User>("Users");
-            col.Insert(new User(69, 1, 69));
-            //Util.Logger.Log(1, "COUNT DATA SIZE : " + col.Count());
-            return true;
-        }
-        /*
-        public static User userexists(ulong id, ulong guildid)
-        {
-            var col = database.GetCollection<User>("Users");
-            IEnumerable<User> Results = col.Find(Query.EQ("DiscordId", id));
-            Util.Logger.Log(Results.GetEnumerator().Current.ToString());
-
-            foreach (var user in Results)
+            Console.WriteLine("addUser()");
+            using (var db = new LiteDatabase(DatabasePath + "\\Databse.db"))
             {
-                Util.Logger.Log("searching @" + user.Id);
-                if (user.DiscordId == id && user.DiscordServerId == guildid)
-                {
-                    return user;
-                }
-            }
-            return null;
-        }
-
-        public static void addUser(ulong id, int permission, ulong guildid)
-        {
-            if (UserExists(id, guildid))
-            {
-                Util.Logger.Log("User Exists");
-            }
-            else
-            {
-                Util.Logger.Log("User doesnt exist");
-            }
-            //var col = database.GetCollection<User>("Users");
-            //col.Insert(new User(id, permission, guildid));
-            
-        }
-        public static void setUser(User user)
-        {
-            var col = database.GetCollection<User>("Users");
-            col.Update(user);
-            if (col.Update(user))
-            {
-                Util.Logger.Log(0, "Updated @"+user.DiscordId+", successfully");
-            }
-            else
-            {
-                Util.Logger.Log(3, "Failed to update @" + user.DiscordId + "");
+                var col = db.GetCollection<User>("Users");
                 col.Insert(user);
-                Util.Logger.Log(0, "Added new user to database @" + user.DiscordId + "");
             }
         }
-        */
+
+        public static int getSize()
+        {
+            Console.WriteLine("getSize()");
+            using (var db = new LiteDatabase(DatabasePath + "\\Databse.db"))
+            {
+                var col = db.GetCollection<User>("Users");
+                return col.Count();
+            }
+        }
+        public static void delUser()
+        {
+
+        }
+
+        public static void updUser()
+        {
+
+        }
+
+        public static User getUser(ulong search_DiscordId, ulong search_GuildId)
+        {
+            Console.WriteLine("getUser()");
+            using (var db = new LiteDatabase(DatabasePath + "\\Databse.db"))
+            {
+                var col = db.GetCollection<User>("Users");
+                IEnumerable<User> results = col.Find(Query.EQ("DiscordId", search_DiscordId));
+
+                foreach (var user in results)
+                {
+                    if (user.GuildId == search_GuildId)
+                    {
+                        return user;
+                    }
+                }
+
+                return null;
+            }
+        }
     }
 }

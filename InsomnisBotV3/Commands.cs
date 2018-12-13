@@ -38,20 +38,6 @@ namespace InsomnisBotV3
             await ctx.RespondAsync("User id: "+ctx.User.Id);
         }
 
-        [DSharpPlus.CommandsNext.Attributes.Command("Do_I_Exist")]
-        public async Task Do_I_Exist(CommandContext ctx)
-        {
-            //await ctx.RespondAsync("User id: " + ctx.User.Id);
-            if(Database.userExists(ctx.Member.Id, ctx.Guild.Id))
-            {
-                await CreateMessage(ctx, "Yes", "Notice");
-            }
-            else
-            {
-                await CreateMessage(ctx, "No", "Notice");
-            }
-            
-        }
         /*
         [DSharpPlus.CommandsNext.Attributes.Command("build")]
         public async Task BuildDatabase(CommandContext ctx)
