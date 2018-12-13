@@ -13,7 +13,6 @@ namespace InsomnisBotV3
         private static DiscordClient discord;
         static CommandsNextModule commands;
         private static string token;
-        private static string DirectoryPath;
 
         static void Install()
         {
@@ -27,10 +26,28 @@ namespace InsomnisBotV3
 
                 Database.initDatabase(filePath);
 
+                Console.WriteLine("Bot security token: ");
+                string torken = Console.ReadLine();
+                Console.WriteLine("Security token: "+torken);
+                File.WriteAllText(filePath+"\\token.txt", token);
+
+                token = torken;
             }
             else
             {
                 Console.WriteLine("Already Installed");
+                if (!File.Exists(filePath + "\\token.txt"))
+                {
+                    Console.WriteLine("No token found!");
+                    Console.WriteLine("Bot security token: ");
+                    string token = Console.ReadLine();
+                    Console.WriteLine("Security token: " + token);
+                    File.WriteAllText(filePath + "\\token.txt", token);
+                }
+                else
+                {
+                    token = File.ReadAllText(filePath + "\\token.txt");
+                }
             }
         }
 
